@@ -36,7 +36,7 @@
   keyfile = argv.keyfile
   certfile = argv.certfile
   key = argv.key
-  polling = false
+  polling = true
 
   transport = "http"
   if keyfile? and certfile?
