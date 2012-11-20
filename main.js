@@ -10,7 +10,7 @@
     DB = this.include('db');
     SC = this.include('sc');
     KEY = this.KEY;
-    BASEPATH = "apps/calc";
+    BASEPATH = this.BASEPATH;
     HMAC_CACHE = {};
     hmac = !KEY
       ? function(it){
