@@ -29,17 +29,14 @@
     try
       return require("optimist").argv
   ) or {}
-  json = (->
-    try
-      return JSON.parse(slurp("/home/dotcloud/environment.json"))
-  )
+
   port = Number(argv.port or ((if json? then json.PORT_NODEJS else undefined)) or process.env.PORT or process.env.VCAP_APP_PORT or process.env.OPENSHIFT_INTERNAL_PORT) or 8000
   host = argv.host or process.env.VCAP_APP_HOST or process.env.OPENSHIFT_INTERNAL_IP or "0.0.0.0"
   basepath = replace$.call(argv.basepath or "", /\/$/, "")
   keyfile = argv.keyfile
   certfile = argv.certfile
   key = argv.key
-  polling = argv.polling
+  polling = false
 
   transport = "http"
   if keyfile? and certfile?
