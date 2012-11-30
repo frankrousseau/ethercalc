@@ -129,7 +129,7 @@ Thank you for your participation.
 
 Check the activity stream to see the newly edited page!
 """
-                window.location = '/'
+                window.location = '#'
 
     window.doresize = !-> window.spreadsheet?DoOnResize!
     onReady = ->

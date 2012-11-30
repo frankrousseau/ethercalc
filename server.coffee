@@ -48,7 +48,7 @@
   console.log "Please connect to: " + transport + "://" + ((if host is "0.0.0.0" then require("os").hostname() else host)) + ":" + port + "/"
   require("zappajs") port, host, options, ->
     @KEY = key
-    @BASEPATH = basepath
+    @BASEPATH = "/apps/ethercalc" #basepath
     @POLLING = polling
     @include "main"
 
