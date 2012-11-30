@@ -37,7 +37,7 @@
               }
             } catch (e$) {}
           } else {
-            window.location = '/_start';
+            window.location = '_start';
             return;
           }
           endpoint = $('script[src*="socket.io/socket.io.js"]').attr('src');

@@ -43,8 +43,8 @@
         var room;
         room = require('uuid-pure').newId(10, 36).toLowerCase();
         return this.response.redirect(KEY
-          ? BASEPATH + "/" + room + "/edit"
-          : BASEPATH + "/" + room);
+          ? room + "/edit"
+          : room);
       }
     });
     this.get({
@@ -58,7 +58,7 @@
           case !((ref$ = this.query.auth) != null && ref$.length):
             return sendFile('index.html').call(this);
           default:
-            return this.response.redirect(BASEPATH + "/" + this.params.room + "?auth=0");
+            return this.response.redirect(this.params.room + "?auth=0");
           }
         }
         : sendFile('index.html')
@@ -67,14 +67,14 @@
       '/:room/edit': function(){
         var room;
         room = this.params.room;
-        return this.response.redirect(BASEPATH + "/" + room + "?auth=" + hmac(room));
+        return this.response.redirect(room + "?auth=" + hmac(room));
       }
     });
     this.get({
       '/:room/view': function(){
         var room;
         room = this.params.room;
-        return this.response.redirect(BASEPATH + "/" + room + "?auth=0");
+        return this.response.redirect(room + "?auth=0");
       }
     });
     IO = this.io;
