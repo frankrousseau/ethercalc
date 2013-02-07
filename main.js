@@ -86,8 +86,15 @@
           snapshot = arg$.snapshot;
           if (snapshot) {
             ref$ = cb.call(this$.params, snapshot), type = ref$[0], content = ref$[1];
-            this$.response.type(type);
-            return this$.response.send(200, content);
+            if (content instanceof Function) {
+              return content(SC[this$.params.room], function(rv){
+                this$.response.type(type);
+                return this$.response.send(200, rv);
+              });
+            } else {
+              this$.response.type(type);
+              return this$.response.send(200, content);
+            }
           } else {
             this$.response.type(Text);
             return this$.response.send(404, '');
@@ -97,24 +104,39 @@
     };
     this.get({
       '/_/:room/cells/:cell': api(function(){
-        return [Json, JSON.stringify(SC[this.room].sheet.cells[this.cell])];
+        var this$ = this;
+        return [
+          Json, function(sc, cb){
+            return sc.exportCell(this$.cell, cb);
+          }
+        ];
       })
     });
     this.get({
       '/_/:room/cells': api(function(){
-        return [Json, JSON.stringify(SC[this.room].sheet.cells)];
+        return [
+          Json, function(sc, cb){
+            return sc.exportCells(cb);
+          }
+        ];
       })
     });
     this.get({
       '/_/:room/html': api(function(){
-        var ref$;
-        return [Html, (ref$ = SC[this.room]) != null ? ref$.CreateSheetHTML() : void 8];
+        return [
+          Html, function(sc, cb){
+            return sc.exportHTML(cb);
+          }
+        ];
       })
     });
     this.get({
       '/_/:room/csv': api(function(){
-        var ref$;
-        return [Csv, (ref$ = SC[this.room]) != null ? ref$.SocialCalc.ConvertSaveToOtherFormat((ref$ = SC[this.room]) != null ? ref$.CreateSheetSave() : void 8, 'csv') : void 8];
+        return [
+          Csv, function(sc, cb){
+            return sc.exportCSV(cb);
+          }
+        ];
       })
     });
     this.get({
@@ -188,6 +210,9 @@
               if (client.id !== id) {
                 continue CleanRoom;
               }
+            }
+            if ((ref$ = SC[room]) != null) {
+              ref$.terminate();
             }
             delete SC[room];
           }
@@ -275,6 +300,10 @@
           DB.del(['audit', 'log', 'chat', 'ecell', 'snapshot'].map(function(it){
             return it + "-" + room;
           }), function(){
+            var ref$;
+            if ((ref$ = SC[room]) != null) {
+              ref$.terminate();
+            }
             delete SC[room];
             return broadcast(this$.data);
           });
