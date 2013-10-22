@@ -9,22 +9,25 @@ if (!(window.location.hash.replace('#', ''))) {
     if (window.location.href.match(/\/([^_][^\/]*)$/)) {
         var SocialCalc = { _room: RegExp.$1 };
     }
+    else {
+        window.location = '/apps/ethercalc/_start';
+    }
 }
 </script>
-<script src="static/ethercalc.js"></script>
-<script src="socket.io/socket.io.js"></script>
-<script src="zappa/zappa.js"></script>
-<script src="player/broadcast.js"></script>
-<script src="player/graph.js"></script>
-<script src="player/main.js"></script>
+<script src="/apps/ethercalc/static/ethercalc.js"></script>
+<script src="/apps/ethercalc/socket.io/socket.io.js"></script>
+<script src="/apps/ethercalc/zappa/zappa.js"></script>
+<script src="/apps/ethercalc/player/broadcast.js"></script>
+<script src="/apps/ethercalc/player/graph.js"></script>
+<script src="/apps/ethercalc/player/main.js"></script>
 
-<link rel="stylesheet" type="text/css" href="static/socialcalc.css">
-<link rel="stylesheet" type="text/css" href="static/index.css">
+<link rel="stylesheet" type="text/css" href="./static/socialcalc.css">
+<link rel="stylesheet" type="text/css" href="./static/index.css">
 <style>
 body
  {font-family:verdana,helvetica,sans-serif;font-size:small;}
 .testclass {border:2px dotted red;}
-.testclass2 {background-image:url(/images/sc-logo.gif);}
+.testclass2 {background-image:url(/apps/ethercalc/images/sc-logo.gif);}
 .smaller {font-size:smaller;}
 .hide {display:none;}
 </style>

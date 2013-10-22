@@ -154,7 +154,7 @@ SocialCalc.Constants = {
    defaultSelectedColnameClass: "", // column with selected cell, needs a cursor property 
    defaultSelectedColnameStyle: "font-size:small;text-align:center;color:#FFFFFF;background-color:#404040;cursor:e-resize;",
    defaultRownameClass: "", // regular row heading numbers
-   defaultRownameStyle: "font-size:small;text-align:right;color:#FFFFFF;background-color:#808080;",
+   defaultRownameStyle: "font-size:small;text-align:right;color:#FFFFFF;background-color:#808080;direction:rtl;",
    defaultSelectedRownameClass: "", // column with selected cell, needs a cursor property 
    defaultSelectedRownameStyle: "font-size:small;text-align:right;color:#FFFFFF;background-color:#404040;",
    defaultUpperLeftClass: "", // Corner cell in upper left
@@ -4880,6 +4880,7 @@ SocialCalc.UndoStack.prototype.PushChange = function(type) { // adding a new thi
    }
 
 SocialCalc.UndoStack.prototype.AddDo = function() {
+   if (!this.stack[this.stack.length-1]) { return; }
    var args = [];
    for (var i=0; i<arguments.length; i++) {
       if (arguments[i]!=null) args.push(arguments[i]); // ignore null or undefined
@@ -4889,6 +4890,7 @@ SocialCalc.UndoStack.prototype.AddDo = function() {
    }
 
 SocialCalc.UndoStack.prototype.AddUndo = function() {
+   if (!this.stack[this.stack.length-1]) { return; }
    var args = [];
    for (var i=0; i<arguments.length; i++) {
       if (arguments[i]!=null) args.push(arguments[i]); // ignore null or undefined
@@ -9069,10 +9071,10 @@ SocialCalc.EditorProcessMouseWheel = function(event, delta, mousewheelinfo, wobj
    if (wobj.functionobj.editor.busy) return; // ignore if busy
 
    if (delta > 0) {
-      wobj.functionobj.editor.ScrollRelative(true, -1);
+      wobj.functionobj.editor.ScrollRelative(true, Math.floor(-delta * 1.5));
       }
    if (delta < 0) {
-      wobj.functionobj.editor.ScrollRelative(true, +1);
+      wobj.functionobj.editor.ScrollRelative(true, Math.ceil(-delta * 1.5));
       }
 
    }
@@ -15613,7 +15615,7 @@ SocialCalc.Formula.OperandsAsRangeOnSheet = function(sheet, operand) {
       }
 
    if (value2.type == "name") { // coord:name is allowed, if name is just one cell
-      value2 = scf.LookupName(othersheet, value2.value);
+      value2 = scf.LookupName(othersheet, value2.value, "end");
       }
 
    if (value2.type == "coord") { // value is a coord reference, so return the combined range
@@ -15687,7 +15689,7 @@ SocialCalc.Formula.OperandAsSheetName = function(sheet, operand) {
 // Note: The range must not have sheet names ("!") in them.
 //
 
-SocialCalc.Formula.LookupName = function(sheet, name) {
+SocialCalc.Formula.LookupName = function(sheet, name, isEnd) {
 
    var pos, specialc, parseinfo;
    var names = sheet.names;
@@ -15743,6 +15745,11 @@ SocialCalc.Formula.LookupName = function(sheet, name) {
       value.type = specialc.substring(pos+1);
       return value;
       }
+   else if (/^[a-zA-Z][a-zA-Z]?$/.test(name)) {
+      value.type = "coord";
+      value.value = name.toUpperCase() + (isEnd ? sheet.attribs.lastrow : 1);
+      return value;
+   }
    else {
       value.value = "";
       value.type = "e#NAME?";
