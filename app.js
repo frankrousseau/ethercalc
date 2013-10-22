@@ -44,7 +44,6 @@ This work is published from Taiwan.
     this.BASEPATH = "/apps/ethercalc/";
     this.POLLING = polling;
     this.CORS = cors;
-    this.EXPIRE = +expire;
     if (isNaN(this.EXPIRE)) {
       this.EXPIRE = 0;
     }

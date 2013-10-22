@@ -70,10 +70,6 @@
       }
       console.log(err);
       console.log("==> Falling back to JSON storage: " + dataDir + "/dump.json");
-      if (this.EXPIRE) {
-        console.log("==> The --expire <seconds> option requires a Redis server; stopping!");
-        process.exit();
-      }
       fs = require('fs');
       db.DB = {};
       try {
