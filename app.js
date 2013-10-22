@@ -41,7 +41,7 @@ This work is published from Taiwan.
   console.log("Please connect to: " + transport + "://" + (host === '0.0.0.0' ? require('os').hostname() : host) + ":" + port + "/");
   require('zappajs')(port, host, options, function(){
     this.KEY = key;
-    this.BASEPATH = "/apps/ethercalc/;
+    this.BASEPATH = "/apps/ethercalc/";
     this.POLLING = polling;
     this.CORS = cors;
     this.EXPIRE = +expire;
